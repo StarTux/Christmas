@@ -1,0 +1,30 @@
+main: com.cavetale.christmas.ChristmasPlugin
+name: Christmas
+version: 0.1
+api-version: 1.13
+description: Christmas Plugin
+author: StarTux
+website: https://cavetale.com
+depend: [Dirty, NPC]
+softdepend: []
+commands:
+  christmas:
+    aliases: [xmas]
+    description: Christmas Command
+    permission: christmas.christmas
+    usage: /<command>
+  christmasadmin:
+    aliases: [xmasadmin, xmasadm]
+    description: Admin Interface
+    permission: christmas.admin
+    usage: |-
+      /xmasadm setdoor <index>
+      /xmasadm additem <index>
+      /xmasadm open <index>
+      /xmasadm reload
+permissions:
+  christmas.christmas:
+    description: Use /xmas
+    default: true
+  christmas.admin:
+    description: Use /xmasadm

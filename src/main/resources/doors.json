@@ -1,0 +1,322 @@
+{
+  "doors": [
+    {
+      "world": "spawn",
+      "x": 0.5,
+      "y": 0.0,
+      "z": 0.5,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": [
+        "{\"id\":\"minecraft:player_head\",\"Count\":1,\"tag\":{\"SkullOwner\":{\"Id\":\"ee87cb2b-75a0-4c84-9173-f6293a778cf9\",\"Properties\":{\"textures\":[{\"Value\":\"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWE3YmMwZDc2YWM2ZGU3MzllOWU4NTcyNzkzMWVjODIzNDQ3Mzk3NDUyMDU5ZmYzODE0MWQzNzE3OWVkYmUxIn19fQ\\u003d\\u003d\"}]}},\"display\":{\"Name\":\"{\\\"text\\\":\\\"Pufferfish\\\"}\"}}}"
+      ]
+    },
+    {
+      "world": "spawn",
+      "x": 0.5,
+      "y": 0.0,
+      "z": 0.5,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": [
+        "{\"id\":\"minecraft:player_head\",\"Count\":1,\"tag\":{\"SkullOwner\":{\"Id\":\"986f0d53-6462-43bc-827f-beba9afdd7f4\",\"Properties\":{\"textures\":[{\"Value\":\"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRlNDI0YjE2NzZmZWVjM2EzZjhlYmFkZTllN2Q2YTZmNzFmNzc1NmE4NjlmMzZmN2RmMGZjMTgyZDQzNmUifX19\"}]}},\"display\":{\"Name\":\"{\\\"text\\\":\\\"Santa Claus\\\"}\"}}}"
+      ]
+    },
+    {
+      "world": "spawn",
+      "x": 0.5,
+      "y": 0.0,
+      "z": 0.5,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": [
+        "{\"id\":\"minecraft:enchanted_golden_apple\",\"Count\":1}"
+      ]
+    },
+    {
+      "world": "spawn",
+      "x": 0.5,
+      "y": 0.0,
+      "z": 0.5,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": [
+        "{\"id\":\"minecraft:enchanted_golden_apple\",\"Count\":1}"
+      ]
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    },
+    {
+      "world": "spawn",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0,
+      "cx": 0,
+      "cz": 0,
+      "commands": [],
+      "items": []
+    }
+  ],
+  "playerHeads": [
+    {
+      "id": "dca29a3a-76d3-4979-88a2-2da034b99212",
+      "url": "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmNlZjlhYTE0ZTg4NDc3M2VhYzEzNGE0ZWU4OTcyMDYzZjQ2NmRlNjc4MzYzY2Y3YjFhMjFhODViNyJ9fX0\u003d"
+    },
+    {
+      "id": "c4f03c0b-0fd5-4472-adeb-b0833856e8be",
+      "url": "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWI2NzMwZGU3ZTViOTQxZWZjNmU4Y2JhZjU3NTVmOTQyMWEyMGRlODcxNzU5NjgyY2Q4ODhjYzRhODEyODIifX19"
+    }
+  ]
+}
