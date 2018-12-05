@@ -80,8 +80,8 @@ final class AdminCommand implements CommandExecutor {
                 root.display.title = "Christmas";
                 root.display.description = "Collect Daily Christmas Presents around Spawn";
                 root.display.background = "minecraft:textures/block/snow.png";
+                root.display.announce_to_chat = false;
                 root.criteria.impossible.trigger = "minecraft:location";
-                root.announce_to_chat = false;
                 file = new File(dir, "root.json");
                 try (FileWriter fw = new FileWriter(file)) {
                     gson.toJson(root, fw);
@@ -142,10 +142,10 @@ final class AdminCommand implements CommandExecutor {
             boolean hidden = false;
             String background = null;
             Icon icon = new Icon();
+            boolean announce_to_chat = true;
         }
         Criteria criteria = new Criteria();
         Display display = new Display();
-        boolean announce_to_chat = true;
         String parent = null;
     }
 
