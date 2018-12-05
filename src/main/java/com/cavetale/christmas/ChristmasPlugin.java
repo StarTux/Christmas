@@ -78,7 +78,7 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
             return true;
         }
         player.sendMessage(ChatColor.GOLD + "Day of Christmas: " + today);
-        player.sendMessage(ChatColor.GOLD + "Doors opened: " + prog.doorsOpened);
+        player.sendMessage(ChatColor.GOLD + "Presents opened: " + prog.doorsOpened);
         return true;
     }
 
@@ -185,22 +185,24 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
             return;
         }
         if (prog.doorsOpened < index - 1) {
-            player.sendMessage(ChatColor.RED + "Open door #" + (prog.doorsOpened + 1) + " first.");
+            player.sendMessage(ChatColor.RED + "Open present " + (prog.doorsOpened + 1) + " first.");
             return;
         }
         prog.doorsOpened = index;
         this.playersJson.dirty = true;
         giveDoor(player, index);
+        getServer().dispatchCommand(getServer().getConsoleSender(), "minecraft:advancement grant " + player.getName() + " until christmas:present" + index);
     }
 
     void giveDoor(Player player, int index) {
-        int advent = adventOf(index);
-        String invTitle = advent > 0 ? "" + ChatColor.DARK_BLUE + st(advent) + " Advent" : ChatColor.BLUE + "Door " + index;
+        String invTitle = ChatColor.BLUE + "Advent Present " + index;
         FakeInvHolder holder = new FakeInvHolder(index);
         Inventory inv = Bukkit.getServer().createInventory(holder, 9, invTitle);
         holder.inventory = inv;
-        for (String s: this.doorsJson.doors.get(index - 1).getItems()) {
-            inv.addItem(Dirty.deserializeItem(s));
+        List<String> items = this.doorsJson.doors.get(index - 1).getItems();
+        int invIndex = (9 - items.size()) / 2;
+        for (String s: items) {
+            inv.setItem(invIndex++, Dirty.deserializeItem(s));
         }
         player.openInventory(inv);
     }
@@ -214,13 +216,7 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
             if (item == null || item.getType() == Material.AIR) continue;
             player.getWorld().dropItem(player.getEyeLocation(), item).setPickupDelay(0);
         }
-        int advent = adventOf(holder.index);
-        if (advent > 0) {
-            player.sendTitle(ChatColor.GOLD + st(advent) + " Advent", ChatColor.GOLD + "You received the " + st(advent).toLowerCase() + " advent key.", 20, 60, 20);
-            player.playSound(player.getEyeLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 1.0f, 1.0f);
-        } else {
-            player.sendTitle(ChatColor.BLUE + "Door " + holder.index, ChatColor.BLUE + "You opened advent calendar door #" + holder.index + ".");
-            player.playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
-        }
+        player.sendTitle(ChatColor.GOLD + "Present " + holder.index, ChatColor.GOLD + "Found Advent Present " + holder.index);
+        player.playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 }

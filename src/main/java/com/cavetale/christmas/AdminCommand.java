@@ -2,6 +2,10 @@ package com.cavetale.christmas;
 
 import com.cavetale.dirty.Dirty;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -57,8 +61,98 @@ final class AdminCommand implements CommandExecutor {
             sender.sendMessage("Players and doors reloaded.");
             return true;
         }
+        case "adv": {
+            try {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                File dir = this.plugin.getServer().getWorlds().get(0).getWorldFolder();
+                dir = new File(dir, "datapacks");
+                dir = new File(dir, "christmas");
+                dir.mkdirs();
+                File file = new File(dir, "pack.mcmeta");
+                try (FileWriter fw = new FileWriter(file)) {
+                    gson.toJson(new PackJson(), fw);
+                }
+                dir = new File(dir, "data");
+                dir = new File(dir, "christmas");
+                dir = new File(dir, "advancements");
+                dir.mkdirs();
+                AdvancementJson root = new AdvancementJson();
+                root.display.title = "Christmas";
+                root.display.description = "Collect Daily Christmas Presents around Spawn";
+                root.display.background = "minecraft:textures/block/snow.png";
+                root.criteria.impossible.trigger = "minecraft:location";
+                file = new File(dir, "root.json");
+                try (FileWriter fw = new FileWriter(file)) {
+                    gson.toJson(root, fw);
+                }
+                file = new File(dir, "root.json");
+                for (XmasDoor door: this.plugin.doorsJson.doors) {
+                    int index = door.getIndex();
+                    AdvancementJson adv = new AdvancementJson();
+                    ItemStack item;
+                    if (!door.getItems().isEmpty()) {
+                        item = Dirty.deserializeItem(door.getItems().get(0));
+                    } else {
+                        item = new ItemStack(Material.GOLDEN_APPLE, index);
+                    }
+                    if (item.getType() == Material.PLAYER_HEAD) item = new ItemStack(Material.GOLDEN_APPLE, index);
+                    adv.display.icon.item = "minecraft:" + item.getType().name().toLowerCase();
+                    Gson gson2 = new GsonBuilder().create();
+                    adv.display.icon.nbt = gson2.toJson(Dirty.serializeItem(item));
+                    adv.display.title = "Present " + door.getIndex();
+                    adv.display.description = "Open Present " + door.getIndex() + ".";
+                    if (index == 1) {
+                        adv.parent = "christmas:root";
+                    } else {
+                        adv.parent = "christmas:present" + (index - 1);
+                    }
+                    file = new File(dir, "present" + index + ".json");
+                    try (FileWriter fw = new FileWriter(file)) {
+                        gson.toJson(adv, fw);
+                    }
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            this.plugin.getServer().reloadData();
+            sender.sendMessage("Advancements generated");
+            return true;
+        }
         default:
             return false;
         }
+    }
+
+    static final class AdvancementJson {
+        static final class Trigger {
+            String trigger = "minecraft:impossible";
+        }
+        static final class Criteria {
+            Trigger impossible = new Trigger();
+        }
+        static final class Icon {
+            String item = "minecraft:golden_apple";
+            String nbt = null;
+        }
+        static final class Display {
+            String title = null;
+            String description = null;
+            boolean show_toast = true;
+            boolean hidden = false;
+            String background = null;
+            Icon icon = new Icon();
+        }
+        Criteria criteria = new Criteria();
+        Display display = new Display();
+        boolean announce_to_chat = true;
+        String parent = null;
+    }
+
+    static final class PackJson {
+        static final class Pack {
+            String description = "Christmas Event Advancements";
+            int pack_format = 1;
+        }
+        Pack pack = new Pack();
     }
 }

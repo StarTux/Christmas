@@ -1,16 +1,14 @@
 package com.cavetale.christmas;
 
-import com.cavetale.dirty.Dirty;
 import com.cavetale.npc.NPC;
 import com.cavetale.npc.NPCPlugin;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -64,21 +62,13 @@ final class XmasDoor {
             // Create skull
             List<PlayerHead> skulls = plugin.doorsJson.playerHeads;
             PlayerHead skull = skulls.get((this.index - 1) % skulls.size());
-            ItemStack playerHead = Dirty.newCraftItemStack(Material.PLAYER_HEAD);
-            Optional<Object> tag = Dirty.accessItemNBT(playerHead, true);
-            tag = Dirty.setNBT(tag, "SkullOwner", new HashMap<String, Object>());
-            Dirty.setNBT(tag, "Name", "Xmas Present (" + this.index + ")");
-            Dirty.setNBT(tag, "Id", skull.id);
-            tag = Dirty.setNBT(tag, "Properties", new HashMap<String, Object>());
-            tag = Dirty.setNBT(tag, "textures", new ArrayList<Object>());
-            tag = Dirty.addNBT(tag, new HashMap<>());
-            Dirty.setNBT(tag, "Value", skull.url);
+            ItemStack playerHead = skull.makeItem(this.index);
             // Put on head
             final NPCPlugin npcPlugin = NPCPlugin.getInstance();
             this.npc = new NPC(npcPlugin, NPC.Type.MOB, this.toLocation().add(0.0, -1.5, 0.0), EntityType.ARMOR_STAND);
             this.npc.setEquipment(EquipmentSlot.HEAD, playerHead);
             this.npc.setFlag(NPC.DataVar.ENTITY_FLAGS, NPC.EntityFlag.ENTITY_INVISIBLE, true);
-            this.npc.updateCustomName("" + this.index);
+            this.npc.setData(NPC.DataVar.ENTITY_CUSTOM_NAME_VISIBLE, true);
             this.npc.setLifespan(2L);
             this.npc.setDelegate(new NPC.Delegate() {
                     @Override public void onTick(NPC n) { }
@@ -94,6 +84,8 @@ final class XmasDoor {
             loc.setYaw(loc.getYaw() + 5.0f);
             this.npc.setLocation(loc);
             this.npc.setHeadYaw(loc.getYaw());
+            final ChatColor[] cs = {ChatColor.GOLD, ChatColor.GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW};
+            this.npc.updateCustomName("" + cs[ThreadLocalRandom.current().nextInt(cs.length)] + this.index);
         }
     }
 }
