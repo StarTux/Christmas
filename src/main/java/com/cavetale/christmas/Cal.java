@@ -6,6 +6,8 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 final class Cal {
+    private Cal() { }
+
     public static int today() {
         TimeZone tz = TimeZone.getTimeZone("America/New_York");
         GregorianCalendar cal = new GregorianCalendar(tz);
