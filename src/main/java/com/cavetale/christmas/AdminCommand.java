@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,6 +55,13 @@ final class AdminCommand implements CommandExecutor {
             int index = Integer.parseInt(args[0]);
             this.plugin.giveDoor(player, index);
             return true;
+        }
+        case "tp": {
+            if (args.length != 1) return false;
+            int index = Integer.parseInt(args[0]);
+            Location loc = this.plugin.doorsJson.doors.get(index - 1).toLocation();
+            sender.sendMessage("Location of present " + index + ": " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+            if (player != null) player.teleport(loc);
         }
         case "reload": {
             this.plugin.importPlayersFile();

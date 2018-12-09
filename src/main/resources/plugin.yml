@@ -21,6 +21,7 @@ commands:
       /xmasadm setdoor <index>
       /xmasadm additem <index>
       /xmasadm open <index>
+      /xmasadm tp <index>
       /xmasadm reload
 permissions:
   christmas.christmas:
