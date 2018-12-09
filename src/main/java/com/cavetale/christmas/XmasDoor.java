@@ -73,9 +73,9 @@ final class XmasDoor {
         } else {
             this.mirage.updateObserverList();
             if (this.mirage.getObservers().isEmpty()) return;
-            if ((this.ticks++ % 3) == 0) {
-                float yaw = (float)(System.nanoTime() / 10000000L) * 1.0f;
-                this.mirage.look(360.0f - yaw % 360.0f, 0.0f);
+            float yaw = (float)(System.nanoTime() / 10000000L) * 0.33f;
+            this.mirage.look(360.0f - yaw % 360.0f, 0.0f);
+            if ((this.ticks++ % 5) == 0) {
                 final ChatColor[] cs = {ChatColor.GOLD, ChatColor.GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW};
                 this.mirage.setCustomName("" + cs[ThreadLocalRandom.current().nextInt(cs.length)] + this.index);
             }
