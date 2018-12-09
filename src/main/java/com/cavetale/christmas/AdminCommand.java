@@ -32,7 +32,7 @@ final class AdminCommand implements CommandExecutor {
             if (args.length != 1) return false;
             int index = Integer.parseInt(args[0]);
             this.plugin.doorsJson.doors.get(index - 1).setLocation(player.getLocation());
-            this.plugin.doorsJson.doors.get(index - 1).setNpc(null);
+            this.plugin.doorsJson.doors.get(index - 1).clearMirage();
             this.plugin.doorsJson.dirty = true;
             player.sendMessage("Set door #" + index + " to current location.");
             return true;

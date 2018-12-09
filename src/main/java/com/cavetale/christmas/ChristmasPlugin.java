@@ -1,6 +1,7 @@
 package com.cavetale.christmas;
 
 import com.cavetale.dirty.Dirty;
+import com.cavetale.mirage.PlayerUseEntityEvent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
@@ -65,6 +66,7 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        for (XmasDoor door: this.doorsJson.doors) door.clearMirage();
     }
 
     @Override
@@ -218,5 +220,16 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
         }
         player.sendTitle(ChatColor.GOLD + "Present " + holder.index, ChatColor.GOLD + "Found Advent Present " + holder.index);
         player.playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
+    }
+
+    @EventHandler
+    public void onPlayerUseEntity(PlayerUseEntityEvent event) {
+        int id = event.getEntityId();
+        for (XmasDoor door: this.doorsJson.doors) {
+            if (door.isId(id)) {
+                findDoor(event.getPlayer(), door.getIndex());
+                return;
+            }
+        }
     }
 }

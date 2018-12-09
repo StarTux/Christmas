@@ -1,7 +1,10 @@
 package com.cavetale.christmas;
 
-import com.cavetale.npc.NPC;
-import com.cavetale.npc.NPCPlugin;
+import com.cavetale.mirage.DataVar;
+import com.cavetale.mirage.EntityFlag;
+import com.cavetale.mirage.Mirage;
+import com.cavetale.mirage.MirageData;
+import com.cavetale.mirage.MirageType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,13 +23,13 @@ import org.bukkit.inventory.ItemStack;
 @Data
 final class XmasDoor {
     private transient int index; // 1 - 25, number of day
-    private transient NPC npc;
+    private transient Mirage mirage;
     private transient int respawnCooldown = 0;
     // Location
     private String world = "spawn";
     private double x, y, z;
-    private float pitch, yaw;
     private int cx, cz;
+    private int ticks = 0;
     // Rewards
     private List<String> commands = new ArrayList<>();
     private List<String> items = new ArrayList<>();
@@ -38,8 +40,6 @@ final class XmasDoor {
         this.x = loc.getX();
         this.y = loc.getY();
         this.z = loc.getZ();
-        this.pitch = loc.getPitch();
-        this.yaw = loc.getYaw();
         this.cx = (int)Math.floor(x) >> 4;
         this.cz = (int)Math.floor(z) >> 4;
     }
@@ -48,44 +48,45 @@ final class XmasDoor {
         if (this.world == null) throw new NullPointerException("world cannot be null");
         World w = Bukkit.getWorld(this.world);
         if (w == null) throw new NullPointerException("World not found: " + this.world);
-        return new Location(w, this.x, this.y, this.z, this.yaw, this.pitch);
+        return new Location(w, this.x, this.y, this.z, 0.0f, 0.0f);
     }
 
     void tick(ChristmasPlugin plugin) {
-        if (npc == null || !npc.isValid()) {
-            if (respawnCooldown > 0) {
-                respawnCooldown -= 1;
-                return;
-            }
-            World w = Bukkit.getWorld(this.world);
-            if (w == null || !w.isChunkLoaded(this.cx, this.cz)) return;
+        World w = Bukkit.getWorld(this.world);
+        if (this.mirage == null) {
             // Create skull
             List<PlayerHead> skulls = plugin.doorsJson.playerHeads;
             PlayerHead skull = skulls.get((this.index - 1) % skulls.size());
             ItemStack playerHead = skull.makeItem(this.index);
             // Put on head
-            final NPCPlugin npcPlugin = NPCPlugin.getInstance();
-            this.npc = new NPC(npcPlugin, NPC.Type.MOB, this.toLocation().add(0.0, -1.5, 0.0), EntityType.ARMOR_STAND);
-            this.npc.setEquipment(EquipmentSlot.HEAD, playerHead);
-            this.npc.setFlag(NPC.DataVar.ENTITY_FLAGS, NPC.EntityFlag.ENTITY_INVISIBLE, true);
-            this.npc.setData(NPC.DataVar.ENTITY_CUSTOM_NAME_VISIBLE, true);
-            this.npc.setLifespan(2L);
-            this.npc.setDelegate(new NPC.Delegate() {
-                    @Override public void onTick(NPC n) { }
-                    @Override public boolean onInteract(NPC n, Player p, boolean r) {
-                        plugin.findDoor(p, XmasDoor.this.index);
-                        return true;
-                    }
-                });
-            npcPlugin.enableNPC(this.npc);
+            this.mirage = new Mirage(plugin);
+            MirageData mirageData = new MirageData();
+            mirageData.type = MirageType.MOB;
+            mirageData.entityType = EntityType.ARMOR_STAND;
+            mirageData.location = MirageData.Location.fromBukkitLocation(toLocation().add(0, -1.35, 0));
+            this.mirage.setup(mirageData);
+            this.mirage.setEquipment(EquipmentSlot.HEAD, playerHead);
+            this.mirage.setMetadata(DataVar.ENTITY_FLAGS, (byte)EntityFlag.ENTITY_INVISIBLE.bitMask);
+            this.mirage.setMetadata(DataVar.ENTITY_CUSTOM_NAME_VISIBLE, true);
         } else {
-            this.npc.setLifespan(this.npc.getLifespan() + 1L);
-            Location loc = this.npc.getLocation();
-            loc.setYaw(loc.getYaw() + 5.0f);
-            this.npc.setLocation(loc);
-            this.npc.setHeadYaw(loc.getYaw());
-            final ChatColor[] cs = {ChatColor.GOLD, ChatColor.GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW};
-            this.npc.updateCustomName("" + cs[ThreadLocalRandom.current().nextInt(cs.length)] + this.index);
+            this.mirage.updateObserverList();
+            if (this.mirage.getObservers().isEmpty()) return;
+            if ((this.ticks++ % 3) == 0) {
+                float yaw = (float)(System.nanoTime() / 10000000L) * 1.0f;
+                this.mirage.look(360.0f - yaw % 360.0f, 0.0f);
+                final ChatColor[] cs = {ChatColor.GOLD, ChatColor.GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW};
+                this.mirage.setCustomName("" + cs[ThreadLocalRandom.current().nextInt(cs.length)] + this.index);
+            }
         }
+    }
+
+    void clearMirage() {
+        if (this.mirage == null) return;
+        this.mirage.removeAllObservers();
+        this.mirage = null;
+    }
+
+    boolean isId(int id) {
+        return this.mirage != null && this.mirage.getEntity().getId() == id;
     }
 }

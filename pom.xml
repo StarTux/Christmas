@@ -60,10 +60,10 @@
       <version>1.18.2</version>
       <scope>provided</scope>
     </dependency>
-    <!-- NPC -->
+    <!-- Mirage -->
     <dependency>
-      <groupId>com.cavetale.npc</groupId>
-      <artifactId>npc</artifactId>
+      <groupId>com.cavetale.mirage</groupId>
+      <artifactId>mirage</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <!-- Dirty -->
