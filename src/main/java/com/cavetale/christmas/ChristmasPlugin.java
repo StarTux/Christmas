@@ -96,6 +96,7 @@ public final class ChristmasPlugin extends JavaPlugin implements Listener {
     }
 
     void importDoorsFile() {
+        if (this.doorsJson != null) for (XmasDoor door: this.doorsJson.doors) door.clearMirage();
         this.doorsJson = loadJsonFile("doors.json", DoorsJson.class, DoorsJson::new);
         while (this.doorsJson.doors.size() < 25) this.doorsJson.doors.add(new XmasDoor());
         for (int i = 0; i < this.doorsJson.doors.size(); i += 1) {

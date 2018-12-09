@@ -14,7 +14,8 @@ final class Cal {
         cal.setTime(new Date());
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (month != 11 || day < 1 || day > 25) return -1;
+        if (month != 11 || day < 1) return -1;
+        if (day > 25) return 25;
         return day;
     }
 }

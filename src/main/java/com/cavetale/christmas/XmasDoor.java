@@ -52,7 +52,6 @@ final class XmasDoor {
     }
 
     void tick(ChristmasPlugin plugin) {
-        World w = Bukkit.getWorld(this.world);
         if (this.mirage == null) {
             // Create skull
             List<PlayerHead> skulls = plugin.doorsJson.playerHeads;
@@ -62,6 +61,9 @@ final class XmasDoor {
             this.mirage = new Mirage(plugin);
             MirageData mirageData = new MirageData();
             mirageData.type = MirageType.MOB;
+            mirageData.debugName = "xmas" + this.index;
+            mirageData.chunkActivationRange = 1;
+            mirageData.chunkViewDistance = 2;
             mirageData.entityType = EntityType.ARMOR_STAND;
             mirageData.location = MirageData.Location.fromBukkitLocation(toLocation().add(0, -1.35, 0));
             this.mirage.setup(mirageData);

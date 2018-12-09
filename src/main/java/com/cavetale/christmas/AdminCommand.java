@@ -62,6 +62,17 @@ final class AdminCommand implements CommandExecutor {
             Location loc = this.plugin.doorsJson.doors.get(index - 1).toLocation();
             sender.sendMessage("Location of present " + index + ": " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
             if (player != null) player.teleport(loc);
+            return true;
+        }
+        case "debug": {
+            if (args.length != 1) return false;
+            int index = Integer.parseInt(args[0]);
+            XmasDoor door = this.plugin.doorsJson.doors.get(index - 1);
+            boolean debug = !door.getMirage().getData().debug;
+            door.getMirage().getData().debug = debug;
+            sender.sendMessage("Debug of door " + door.getIndex() + ": " + debug);
+            sender.sendMessage("Observers: " + door.getMirage().getObservers());
+            return true;
         }
         case "reload": {
             this.plugin.importPlayersFile();
