@@ -62,8 +62,6 @@ final class XmasDoor {
             MirageData mirageData = new MirageData();
             mirageData.type = MirageType.MOB;
             mirageData.debugName = "xmas" + this.index;
-            mirageData.chunkActivationRange = 1;
-            mirageData.chunkViewDistance = 2;
             mirageData.entityType = EntityType.ARMOR_STAND;
             mirageData.location = MirageData.Location.fromBukkitLocation(toLocation().add(0, -1.35, 0));
             this.mirage.setup(mirageData);
