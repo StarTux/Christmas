@@ -87,6 +87,6 @@ final class XmasDoor {
     }
 
     boolean isId(int id) {
-        return this.mirage != null && this.mirage.getEntity().getId() == id;
+        return this.mirage != null && this.mirage.getEntityId() == id;
     }
 }
