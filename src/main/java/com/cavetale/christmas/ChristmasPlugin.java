@@ -8,8 +8,11 @@ import com.cavetale.christmas.json.PresentsJson;
 import com.cavetale.christmas.util.Advancements;
 import com.cavetale.christmas.util.Cal;
 import com.cavetale.core.util.Json;
+import com.cavetale.mytems.Mytems;
+import com.destroystokyo.paper.Title;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,8 +20,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -169,19 +174,40 @@ public final class ChristmasPlugin extends JavaPlugin {
         playerProgress.setPresentsOpened(index);
         playersJson.markDirty(playerProgress);
         givePresent(player, index);
-        Advancements.give(player, this, "present" + index);
     }
 
     public void givePresent(Player player, int index) {
-        String invTitle = ChatColor.BLUE + "Advent Present " + index;
-        FakeInvHolder holder = new FakeInvHolder(index);
-        Inventory inv = Bukkit.getServer().createInventory(holder, 9, invTitle);
-        holder.setInventory(inv);
+        Gui gui = new Gui(this);
+        gui.title(ChatColor.BLUE + "Advent Present " + index);
+        gui.size(27);
         List<Item> items = presentsJson.getPresents().get(index - 1).getItems();
-        int invIndex = (9 - items.size()) / 2;
+        List<ItemStack> itemStacks = new ArrayList<>();
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < 27; i += 1) indexes.add(i);
+        Collections.sort(indexes, (a, b) -> Integer.compare(Math.abs(a - 13), Math.abs(b - 13)));
         for (Item item : items) {
-            inv.setItem(invIndex++, item.toItemStack());
+            itemStacks.add(item.toItemStack());
         }
-        player.openInventory(inv);
+        ItemStack christmasTokenItem = Mytems.CHRISTMAS_TOKEN.getMytem().getItem();
+        christmasTokenItem.setAmount(((index - 1) % 3) + 1);
+        itemStacks.add(christmasTokenItem);
+        itemStacks.add(Mytems.KITTY_COIN.getMytem().getItem());
+        for (int i = 0; i < itemStacks.size(); i += 1) {
+            gui.setItem(indexes.get(i), itemStacks.get(i));
+        }
+        gui.setEditable(true);
+        gui.onClose(event -> {
+                System.out.println("onClose");
+                Advancements.give(player, this, "present" + index);
+                player.sendTitle(new Title("", ChatColor.GREEN + "Present #" + index + " Found!", 5, 20, 5));
+                for (ItemStack item: event.getInventory()) {
+                    if (item == null || item.getAmount() <= 0) continue;
+                    for (ItemStack drop : player.getInventory().addItem(item).values()) {
+                        player.getWorld().dropItem(player.getEyeLocation(), drop).setPickupDelay(0);
+                    }
+                }
+            });
+        gui.open(player);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.25f, 2.0f);
     }
 }

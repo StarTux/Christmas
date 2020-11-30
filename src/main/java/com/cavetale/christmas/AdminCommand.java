@@ -102,13 +102,16 @@ final class AdminCommand implements TabExecutor {
         gui.setEditable(true);
         gui.size(6 * 9);
         gui.title("Present #" + index);
+        for (Item item : plugin.getPresentsJson().getPresent(index - 1).getItems()) {
+            gui.getInventory().addItem(item.toItemStack());
+        }
         gui.onClose(event -> {
                 List<Item> items = new ArrayList<>();
                 for (ItemStack itemStack : gui.getInventory()) {
                     if (itemStack == null) continue;
                     items.add(new Item(itemStack));
                 }
-                plugin.getPresentsJson().getPresent(index).setItems(items);
+                plugin.getPresentsJson().getPresent(index - 1).setItems(items);
                 plugin.getPresentsJson().setDirty(true);
                 player.sendMessage(ChatColor.BLUE + "Present #" + index + " now has " + items.size() + " items.");
             });
@@ -123,6 +126,9 @@ final class AdminCommand implements TabExecutor {
         gui.setEditable(true);
         gui.size(6 * 9);
         gui.title("Present Items");
+        for (Item item : plugin.getPresentsJson().getPresentItems()) {
+            gui.getInventory().addItem(item.toItemStack());
+        }
         gui.onClose(event -> {
                 List<Item> items = new ArrayList<>();
                 for (ItemStack itemStack : gui.getInventory()) {

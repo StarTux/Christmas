@@ -11,15 +11,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -29,19 +26,6 @@ public final class EventListener implements Listener {
     public EventListener enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         return this;
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        if (!(event.getInventory().getHolder() instanceof FakeInvHolder)) return;
-        FakeInvHolder holder = (FakeInvHolder) event.getInventory().getHolder();
-        Player player = (Player) event.getPlayer();
-        for (ItemStack item: event.getInventory()) {
-            if (item == null || item.getType() == Material.AIR) continue;
-            for (ItemStack drop : player.getInventory().addItem(item).values()) {
-                player.getWorld().dropItem(player.getEyeLocation(), drop).setPickupDelay(0);
-            }
-        }
     }
 
     @EventHandler
