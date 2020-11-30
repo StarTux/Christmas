@@ -5,20 +5,20 @@ api-version: 1.13
 description: Christmas Plugin
 author: StarTux
 website: https://cavetale.com
-depend: [Dirty, Core]
+depend: [Core, Sidebar]
 softdepend: []
 commands:
   christmas:
     aliases: [xmas]
     description: Christmas Command
     permission: christmas.christmas
-    usage: /<command>
+    usage: /xmas
   christmasadmin:
     aliases: [xmasadmin, xmasadm]
     description: Admin Interface
     permission: christmas.admin
     usage: |-
-      /xmasadm setdoor <index>
+      /xmasadm setpresent <index>
       /xmasadm additem <index>
       /xmasadm open <index>
       /xmasadm tp <index>

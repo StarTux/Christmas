@@ -1,25 +1,21 @@
 package com.cavetale.christmas;
 
-import com.cavetale.christmas.json.PlayerHead;
 import com.cavetale.christmas.json.Present;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
 
 @RequiredArgsConstructor @Getter
 public final class PresentRuntime {
-    private static final ChatColor[] COLORS = {ChatColor.GOLD, ChatColor.GRAY, ChatColor.BLUE, ChatColor.GREEN,
-                                               ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW};
     private final ChristmasPlugin plugin;
     private final int index; // 1 - 25, number of day
     private ArmorStand armorStand;
     private int respawnCooldown = 0;
     private int ticks = 0;
+    private double yaw = 0;
 
     public void tick() {
         if (armorStand == null) {
@@ -34,14 +30,16 @@ public final class PresentRuntime {
     }
 
     public void tickArmorStand() {
-        Present present = getPresent();
-        if (!armorStand.isValid()) clearArmorStand();
-        float yaw = (float) (System.nanoTime() / 10000000L) * 0.33f;
-        Location location = present.toLocation();
-        location.setYaw(yaw);
-        armorStand.teleport(location);
-        if ((ticks++ % 5) == 0) {
-            armorStand.setCustomName("" + COLORS[ThreadLocalRandom.current().nextInt(COLORS.length)] + index);
+        if (!armorStand.isValid()) {
+            clearArmorStand();
+            return;
+        }
+        if (ticks++ % 2 == 0) {
+            EulerAngle headPose = armorStand.getHeadPose();
+            yaw += 0.04;
+            if (yaw > 1.0) yaw -= 2.0;
+            headPose = headPose.setY(Math.sin(yaw * Math.PI));
+            armorStand.setHeadPose(headPose);
         }
     }
 
@@ -50,15 +48,17 @@ public final class PresentRuntime {
         World w = present.getWorld();
         if (w == null) return null;
         if (!present.isChunkLoaded(w)) return null;
-        PlayerHead playerHead = plugin.getPresentsJson().getPlayerHead(index - 1);
-        ItemStack helmet = playerHead.makeItem(index);
+        ItemStack helmet = plugin.getPresentsJson().getPresentItem(index - 1).toItemStack();
         armorStand = w.spawn(present.toLocation(w), ArmorStand.class, as -> {
                 as.setPersistent(false);
                 as.setVisible(false);
-                as.setMarker(true);
                 as.setHelmet(helmet);
-                as.setCustomNameVisible(true);
+                as.setSmall(true);
             });
+        if (plugin.isDebug()) {
+            plugin.getLogger().info("Spawned Present #" + index
+                                    + " at " + present.toLocationString());
+        }
         return armorStand;
     }
 

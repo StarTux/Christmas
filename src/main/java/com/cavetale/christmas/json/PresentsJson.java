@@ -8,7 +8,7 @@ import lombok.Data;
 public final class PresentsJson {
     private transient boolean dirty;
     private List<Present> presents = new ArrayList<>();
-    private List<PlayerHead> playerHeads = new ArrayList<>();
+    private List<Item> presentItems = new ArrayList<>();
 
     public Present getPresent(int index) {
         if (index < 0) throw new IllegalArgumentException("index=" + index);
@@ -16,8 +16,8 @@ public final class PresentsJson {
         return presents.get(index);
     }
 
-    public PlayerHead getPlayerHead(int index) {
+    public Item getPresentItem(int index) {
         if (index < 0) throw new IllegalArgumentException("index=" + index);
-        return playerHeads.get(index % playerHeads.size());
+        return presentItems.get(index % presentItems.size());
     }
 }

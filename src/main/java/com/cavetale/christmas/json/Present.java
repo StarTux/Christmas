@@ -15,8 +15,8 @@ public final class Present {
     private double z;
     private int cx;
     private int cz;
-    private List<String> commands = new ArrayList<>();
-    private List<String> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
+    private String hint = "";
 
     public void setLocation(Location loc) {
         if (loc == null) throw new NullPointerException("loc cannot be null");
@@ -52,5 +52,12 @@ public final class Present {
         return w != null
             ? isChunkLoaded(w)
             : false;
+    }
+
+    public String toLocationString() {
+        return world
+            + ":" + (int) Math.floor(x)
+            + "," + (int) Math.floor(y)
+            + "," + (int) Math.floor(z);
     }
 }

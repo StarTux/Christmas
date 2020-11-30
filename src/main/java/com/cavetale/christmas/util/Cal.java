@@ -1,11 +1,11 @@
-package com.cavetale.christmas;
+package com.cavetale.christmas.util;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-final class Cal {
+public final class Cal {
     private Cal() { }
 
     public static int today() {

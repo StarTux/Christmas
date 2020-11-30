@@ -67,18 +67,18 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Dirty -->
-    <dependency>
-      <groupId>com.cavetale.dirty</groupId>
-      <artifactId>dirty</artifactId>
-      <version>0.1-SNAPSHOT</version>
-      <optional>true</optional>
-    </dependency>
-
     <!-- Core -->
     <dependency>
       <groupId>com.cavetale.core</groupId>
       <artifactId>core</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- Sidebar -->
+    <dependency>
+      <groupId>com.cavetale.sidebar</groupId>
+      <artifactId>sidebar</artifactId>
       <version>0.1-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>

@@ -1,6 +1,8 @@
 package com.cavetale.christmas;
 
 import com.cavetale.christmas.json.PlayerProgress;
+import com.cavetale.christmas.json.Present;
+import com.cavetale.christmas.util.Cal;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -22,13 +24,22 @@ public final class ChristmasCommand implements CommandExecutor {
         if (!(sender instanceof Player)) return false;
         Player player = (Player) sender;
         PlayerProgress prog = plugin.getProgress(player);
-        int today = Cal.today();
-        if (today < 1 || today > 25) {
+        int today = plugin.isDebug() ? prog.getPresentsOpened() + 1 : Cal.today();
+        if (today < 1) {
+            player.sendMessage(ChatColor.RED + "Christmas hasn't started yet.");
+            return true;
+        }
+        if (today > 25) {
             player.sendMessage(ChatColor.RED + "Christmas is over.");
             return true;
         }
-        player.sendMessage(ChatColor.GOLD + "Day of Christmas: " + today);
-        player.sendMessage(ChatColor.GOLD + "Presents opened: " + prog.getPresentsOpened());
+        player.sendMessage(ChatColor.GRAY + "Day of Christmas: " + ChatColor.GOLD + today);
+        player.sendMessage(ChatColor.GRAY + "Presents opened: " + ChatColor.GOLD + prog.getPresentsOpened());
+        if (today > prog.getPresentsOpened()) {
+            Present present = plugin.getPresentsJson().getPresent(today - 1);
+            player.sendMessage(ChatColor.GRAY + "Next: " + ChatColor.GOLD + "Present #" + today);
+            player.sendMessage(ChatColor.GRAY + "Hint #" + today  + ": " + ChatColor.GOLD + present.getHint());
+        }
         return true;
     }
 }
