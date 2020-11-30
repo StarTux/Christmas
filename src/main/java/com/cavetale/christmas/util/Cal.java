@@ -9,7 +9,7 @@ public final class Cal {
     private Cal() { }
 
     public static int today() {
-        TimeZone tz = TimeZone.getTimeZone("America/New_York");
+        TimeZone tz = TimeZone.getTimeZone("Europe/Berlin");
         GregorianCalendar cal = new GregorianCalendar(tz);
         cal.setTime(new Date());
         int month = cal.get(Calendar.MONTH);
@@ -17,5 +17,13 @@ public final class Cal {
         if (month != 11 || day < 1) return -1;
         if (day > 25) return 25;
         return day;
+    }
+
+    public static int hoursLeft() {
+        TimeZone tz = TimeZone.getTimeZone("Europe/Berlin");
+        GregorianCalendar cal = new GregorianCalendar(tz);
+        cal.setTime(new Date());
+        int hours = cal.get(Calendar.HOUR_OF_DAY);
+        return 24 - hours;
     }
 }

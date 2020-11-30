@@ -48,21 +48,20 @@ public final class EventListener implements Listener {
     @EventHandler
     public void onPlayerSidebar(PlayerSidebarEvent event) {
         Player player = event.getPlayer();
-        boolean debug = plugin.isDebug();
-        int today = debug
-            ? plugin.getProgress(player).getPresentsOpened() + 1
-            : Cal.today();
+        int today = Cal.today();
         if (today < 1 || today > 25) return;
         int progress = plugin.getProgress(player).getPresentsOpened();
-        if ((!debug && progress >= today) || progress >= 25) {
+        if (progress >= today || progress >= 25) {
+            int hoursLeft = Cal.hoursLeft();
+            String hoursLeftString = hoursLeft == 1 ? "1 hour" : hoursLeft + " hours";
             event.addLines(plugin, Priority.HIGHEST,
-                           Arrays.asList("Xmas " + ChatColor.GREEN + CHECKMARK));
+                           Arrays.asList("Xmas " + ChatColor.GREEN + CHECKMARK,
+                                         "Next " + ChatColor.GREEN + hoursLeftString));
         } else {
             Present present = plugin.getPresentsJson().getPresent(today - 1);
             int gifts = today - progress;
             List<String> lines = new ArrayList<>();
             lines.add("Xmas " + ChatColor.GREEN + "Present #" + today);
-            if (debug) lines.add("" + ChatColor.RED + ChatColor.BOLD + "DEBUG " + CHECKMARK);
             lines.addAll(Text.wrapLine("Hint " + ChatColor.GRAY + present.getHint(), 18));
             lines.add("See " + ChatColor.GREEN + "/xmas");
             event.addLines(plugin, Priority.HIGHEST, lines);

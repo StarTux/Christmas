@@ -24,7 +24,7 @@ public final class ChristmasCommand implements CommandExecutor {
         if (!(sender instanceof Player)) return false;
         Player player = (Player) sender;
         PlayerProgress prog = plugin.getProgress(player);
-        int today = plugin.isDebug() ? prog.getPresentsOpened() + 1 : Cal.today();
+        int today = Cal.today();
         if (today < 1) {
             player.sendMessage(ChatColor.RED + "Christmas hasn't started yet.");
             return true;
