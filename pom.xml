@@ -54,7 +54,7 @@
     <dependency>
       <groupId>com.destroystokyo.paper</groupId>
       <artifactId>paper</artifactId>
-      <version>1.15.2-R0.1-SNAPSHOT</version>
+      <version>1.16.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
@@ -65,14 +65,6 @@
       <artifactId>lombok</artifactId>
       <version>1.18.2</version>
       <scope>provided</scope>
-    </dependency>
-
-    <!-- Mirage -->
-    <dependency>
-      <groupId>com.cavetale.mirage</groupId>
-      <artifactId>mirage</artifactId>
-      <version>0.1-SNAPSHOT</version>
-      <optional>true</optional>
     </dependency>
 
     <!-- Dirty -->

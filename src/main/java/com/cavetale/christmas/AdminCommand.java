@@ -1,5 +1,6 @@
 package com.cavetale.christmas;
 
+import com.cavetale.christmas.json.XmasDoor;
 import com.cavetale.dirty.Dirty;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,14 +28,14 @@ final class AdminCommand implements CommandExecutor {
     }
 
     private boolean onCommand(CommandSender sender, String cmd, String[] args) {
-        final Player player = sender instanceof Player ? (Player)sender : null;
+        final Player player = sender instanceof Player ? (Player) sender : null;
         switch (cmd) {
         case "setdoor": {
             if (args.length != 1) return false;
             int index = Integer.parseInt(args[0]);
-            this.plugin.doorsJson.doors.get(index - 1).setLocation(player.getLocation());
-            this.plugin.doorsJson.doors.get(index - 1).clearMirage();
-            this.plugin.doorsJson.dirty = true;
+            plugin.doorsJson.getDoors().get(index - 1).setLocation(player.getLocation());
+            plugin.doorsJson.getDoors().get(index - 1).clearArmorStand();
+            plugin.doorsJson.setDirty(true);
             player.sendMessage("Set door #" + index + " to current location.");
             return true;
         }
@@ -45,45 +46,35 @@ final class AdminCommand implements CommandExecutor {
             if (item == null || item.getType() == Material.AIR) throw new IllegalArgumentException("holding air");
             Gson gson = new Gson();
             String json = gson.toJson(Dirty.serializeItem(item));
-            this.plugin.doorsJson.doors.get(index - 1).getItems().add(json);
-            this.plugin.doorsJson.dirty = true;
+            plugin.doorsJson.getDoors().get(index - 1).getItems().add(json);
+            plugin.doorsJson.setDirty(true);
             player.sendMessage("Item added to door #" + index + ": " + json);
             return true;
         }
         case "open": {
             if (args.length != 1) return false;
             int index = Integer.parseInt(args[0]);
-            this.plugin.giveDoor(player, index);
+            plugin.giveDoor(player, index);
             return true;
         }
         case "tp": {
             if (args.length != 1) return false;
             int index = Integer.parseInt(args[0]);
-            Location loc = this.plugin.doorsJson.doors.get(index - 1).toLocation();
+            Location loc = plugin.doorsJson.getDoors().get(index - 1).toLocation();
             sender.sendMessage("Location of present " + index + ": " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
             if (player != null) player.teleport(loc);
             return true;
         }
-        case "debug": {
-            if (args.length != 1) return false;
-            int index = Integer.parseInt(args[0]);
-            XmasDoor door = this.plugin.doorsJson.doors.get(index - 1);
-            boolean debug = !door.getMirage().getData().debug;
-            door.getMirage().getData().debug = debug;
-            sender.sendMessage("Debug of door " + door.getIndex() + ": " + debug);
-            sender.sendMessage("Observers: " + door.getMirage().getObservers());
-            return true;
-        }
         case "reload": {
-            this.plugin.importPlayersFile();
-            this.plugin.importDoorsFile();
+            plugin.importPlayersFile();
+            plugin.importDoorsFile();
             sender.sendMessage("Players and doors reloaded.");
             return true;
         }
         case "adv": {
             try {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                File dir = this.plugin.getServer().getWorlds().get(0).getWorldFolder();
+                File dir = plugin.getServer().getWorlds().get(0).getWorldFolder();
                 dir = new File(dir, "datapacks");
                 dir = new File(dir, "christmas");
                 dir.mkdirs();
@@ -106,7 +97,7 @@ final class AdminCommand implements CommandExecutor {
                     gson.toJson(root, fw);
                 }
                 file = new File(dir, "root.json");
-                for (XmasDoor door: this.plugin.doorsJson.doors) {
+                for (XmasDoor door: plugin.doorsJson.getDoors()) {
                     int index = door.getIndex();
                     AdvancementJson adv = new AdvancementJson();
                     ItemStack item;
@@ -134,7 +125,7 @@ final class AdminCommand implements CommandExecutor {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-            this.plugin.getServer().reloadData();
+            plugin.getServer().reloadData();
             sender.sendMessage("Advancements generated");
             return true;
         }
@@ -147,13 +138,17 @@ final class AdminCommand implements CommandExecutor {
         static final class Trigger {
             String trigger = "minecraft:impossible";
         }
+
         static final class Criteria {
             Trigger impossible = new Trigger();
         }
+
         static final class Icon {
             String item = "minecraft:golden_apple";
             String nbt = null;
         }
+
+        @SuppressWarnings("MemberName")
         static final class Display {
             String title = null;
             String description = null;
@@ -169,10 +164,12 @@ final class AdminCommand implements CommandExecutor {
     }
 
     static final class PackJson {
+        @SuppressWarnings("MemberName")
         static final class Pack {
             String description = "Christmas Event Advancements";
             int pack_format = 1;
         }
+
         Pack pack = new Pack();
     }
 }
