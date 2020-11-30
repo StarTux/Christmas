@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public final class PlayerProgress {
-    private int doorsOpened = 0;
+    private transient boolean dirty;
+    private int presentsOpened = 0;
 }

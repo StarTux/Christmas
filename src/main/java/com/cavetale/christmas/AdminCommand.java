@@ -1,6 +1,6 @@
 package com.cavetale.christmas;
 
-import com.cavetale.christmas.json.XmasDoor;
+import com.cavetale.christmas.json.Present;
 import com.cavetale.dirty.Dirty;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -21,54 +22,70 @@ import org.bukkit.inventory.ItemStack;
 final class AdminCommand implements CommandExecutor {
     private final ChristmasPlugin plugin;
 
+    public AdminCommand enable() {
+        plugin.getCommand("xmasadm").setExecutor(this);
+        return this;
+    }
+
+    static final class Wrong extends Exception {
+        Wrong(final String msg) {
+            super(msg);
+        }
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 0) return false;
-        return onCommand(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
+        try {
+            return onCommand(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
+        } catch (Wrong w) {
+            sender.sendMessage(ChatColor.RED + w.getMessage());
+            return true;
+        }
     }
 
-    private boolean onCommand(CommandSender sender, String cmd, String[] args) {
+    private boolean onCommand(CommandSender sender, String cmd, String[] args) throws Wrong {
         final Player player = sender instanceof Player ? (Player) sender : null;
         switch (cmd) {
-        case "setdoor": {
+        case "setpresent": {
             if (args.length != 1) return false;
-            int index = Integer.parseInt(args[0]);
-            plugin.doorsJson.getDoors().get(index - 1).setLocation(player.getLocation());
-            plugin.doorsJson.getDoors().get(index - 1).clearArmorStand();
-            plugin.doorsJson.setDirty(true);
-            player.sendMessage("Set door #" + index + " to current location.");
+            int index = parseIndex(args[0]);
+            plugin.getPresentsJson().getPresents().get(index - 1).setLocation(player.getLocation());
+            plugin.getPresentRuntimes().get(index - 1).clearArmorStand();
+            plugin.getPresentsJson().setDirty(true);
+            player.sendMessage("Set present #" + index + " to current location.");
             return true;
         }
         case "additem": {
             if (args.length != 1) return false;
-            int index = Integer.parseInt(args[0]);
+            int index = parseIndex(args[0]);
             ItemStack item = player.getInventory().getItemInMainHand();
             if (item == null || item.getType() == Material.AIR) throw new IllegalArgumentException("holding air");
             Gson gson = new Gson();
             String json = gson.toJson(Dirty.serializeItem(item));
-            plugin.doorsJson.getDoors().get(index - 1).getItems().add(json);
-            plugin.doorsJson.setDirty(true);
-            player.sendMessage("Item added to door #" + index + ": " + json);
+            plugin.getPresentsJson().getPresents().get(index - 1).getItems().add(json);
+            plugin.getPresentsJson().setDirty(true);
+            player.sendMessage("Item added to present #" + index + ": " + json);
             return true;
         }
         case "open": {
             if (args.length != 1) return false;
-            int index = Integer.parseInt(args[0]);
-            plugin.giveDoor(player, index);
+            int index = parseIndex(args[0]);
+            plugin.givePresent(player, index);
             return true;
         }
         case "tp": {
             if (args.length != 1) return false;
-            int index = Integer.parseInt(args[0]);
-            Location loc = plugin.doorsJson.getDoors().get(index - 1).toLocation();
+            int index = parseIndex(args[0]);
+            Location loc = plugin.getPresentsJson().getPresents().get(index - 1).toLocation();
             sender.sendMessage("Location of present " + index + ": " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
             if (player != null) player.teleport(loc);
             return true;
         }
         case "reload": {
-            plugin.importPlayersFile();
-            plugin.importDoorsFile();
-            sender.sendMessage("Players and doors reloaded.");
+            plugin.importPlayerFiles();
+            plugin.importPresentsFile();
+            sender.sendMessage("Players and presents reloaded.");
             return true;
         }
         case "adv": {
@@ -97,12 +114,13 @@ final class AdminCommand implements CommandExecutor {
                     gson.toJson(root, fw);
                 }
                 file = new File(dir, "root.json");
-                for (XmasDoor door: plugin.doorsJson.getDoors()) {
-                    int index = door.getIndex();
+                int i = 1;
+                for (Present present: plugin.getPresentsJson().getPresents()) {
+                    int index = i++;
                     AdvancementJson adv = new AdvancementJson();
                     ItemStack item;
-                    if (!door.getItems().isEmpty()) {
-                        item = Dirty.deserializeItem(door.getItems().get(0));
+                    if (!present.getItems().isEmpty()) {
+                        item = Dirty.deserializeItem(present.getItems().get(0));
                     } else {
                         item = new ItemStack(Material.GOLDEN_APPLE, index);
                     }
@@ -110,8 +128,8 @@ final class AdminCommand implements CommandExecutor {
                     adv.display.icon.item = "minecraft:" + item.getType().name().toLowerCase();
                     Gson gson2 = new GsonBuilder().create();
                     adv.display.icon.nbt = gson2.toJson(Dirty.serializeItem(item));
-                    adv.display.title = "Present " + door.getIndex();
-                    adv.display.description = "Open Present " + door.getIndex() + ".";
+                    adv.display.title = "Present " + index;
+                    adv.display.description = "Open Present " + index + ".";
                     if (index == 1) {
                         adv.parent = "christmas:root";
                     } else {
@@ -171,5 +189,18 @@ final class AdminCommand implements CommandExecutor {
         }
 
         Pack pack = new Pack();
+    }
+
+    public static int parseIndex(String arg) throws Wrong {
+        int index;
+        try {
+            index = Integer.parseInt(arg);
+        } catch (NumberFormatException nfe) {
+            throw new Wrong("Invalid index: " + arg);
+        }
+        if (index < 1 || index > 25) {
+            throw new Wrong("Invalid index: " + index);
+        }
+        return index;
     }
 }
