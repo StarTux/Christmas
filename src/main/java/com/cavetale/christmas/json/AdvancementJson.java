@@ -28,5 +28,6 @@ public final class AdvancementJson {
         public String background = null;
         public Icon icon = new Icon();
         public boolean announce_to_chat = true;
+        public String frame = null; // task, goal, challenge
     }
 }

@@ -218,6 +218,9 @@ final class AdminCommand implements TabExecutor {
                 } else {
                     adv.parent = "christmas:present" + (index - 1);
                 }
+                if (index == 25) {
+                    adv.display.frame = "challenge";
+                }
                 file = new File(dir, "present" + index + ".json");
                 try (FileWriter fw = new FileWriter(file)) {
                     gson.toJson(adv, fw);
