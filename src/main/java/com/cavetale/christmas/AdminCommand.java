@@ -185,6 +185,7 @@ final class AdminCommand implements TabExecutor {
             dir.mkdirs();
             AdvancementJson root = new AdvancementJson();
             root.display.title = "Christmas";
+            root.display.icon.item = "minecraft:nether_star";
             root.display.description = "Collect Daily Christmas Presents around Spawn";
             root.display.background = "minecraft:textures/block/snow.png";
             root.display.announce_to_chat = false;
