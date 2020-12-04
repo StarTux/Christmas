@@ -212,6 +212,7 @@ final class AdminCommand implements TabExecutor {
                 adv.display.description = present.getHint() != null
                     ? present.getHint()
                     : "Open Present " + index + ".";
+                adv.display.hidden = true;
                 if (index == 1) {
                     adv.parent = "christmas:root";
                 } else {
