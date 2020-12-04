@@ -208,7 +208,9 @@ final class AdminCommand implements TabExecutor {
                 adv.display.icon.item = "minecraft:" + item.getType().name().toLowerCase();
                 Gson gson2 = new GsonBuilder().create();
                 adv.display.title = "Present " + index;
-                adv.display.description = "Open Present " + index + ".";
+                adv.display.description = present.getHint() != null
+                    ? present.getHint()
+                    : "Open Present " + index + ".";
                 if (index == 1) {
                     adv.parent = "christmas:root";
                 } else {
