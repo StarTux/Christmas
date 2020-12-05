@@ -58,7 +58,7 @@ public final class EventListener implements Listener {
                            Arrays.asList("Xmas " + ChatColor.GREEN + CHECKMARK,
                                          "Next " + ChatColor.GREEN + hoursLeftString));
         } else {
-            Present present = plugin.getPresentsJson().getPresent(today - 1);
+            Present present = plugin.getPresentsJson().getPresent(progress);
             int gifts = today - progress;
             List<String> lines = new ArrayList<>();
             lines.add("Xmas " + ChatColor.GREEN + "Present #" + today);
