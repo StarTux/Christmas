@@ -35,10 +35,11 @@ public final class ChristmasCommand implements CommandExecutor {
         }
         player.sendMessage(ChatColor.GRAY + "Day of Christmas: " + ChatColor.GOLD + today);
         player.sendMessage(ChatColor.GRAY + "Presents opened: " + ChatColor.GOLD + prog.getPresentsOpened());
-        if (today > prog.getPresentsOpened() && prog.getPresentsOpened() < 25) {
-            Present present = plugin.getPresentsJson().getPresent(prog.getPresentsOpened());
-            player.sendMessage(ChatColor.GRAY + "Next: " + ChatColor.GOLD + "Present #" + today);
-            player.sendMessage(ChatColor.GRAY + "Hint #" + today  + ": " + ChatColor.GOLD + present.getHint());
+        int progress = prog.getPresentsOpened();
+        if (today > prog.getPresentsOpened() && progress < 25) {
+            Present present = plugin.getPresentsJson().getPresent(progress);
+            player.sendMessage(ChatColor.GRAY + "Next: " + ChatColor.GOLD + "Present #" + (progress + 1));
+            player.sendMessage(ChatColor.GRAY + "Hint #" + (progress + 1)  + ": " + ChatColor.GOLD + present.getHint());
         }
         return true;
     }

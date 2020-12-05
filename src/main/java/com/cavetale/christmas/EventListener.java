@@ -61,7 +61,7 @@ public final class EventListener implements Listener {
             Present present = plugin.getPresentsJson().getPresent(progress);
             int gifts = today - progress;
             List<String> lines = new ArrayList<>();
-            lines.add("Xmas " + ChatColor.GREEN + "Present #" + today);
+            lines.add("Xmas " + ChatColor.GREEN + "Present #" + (progress + 1));
             lines.addAll(Text.wrapLine("Hint " + ChatColor.GRAY + present.getHint(), 18));
             lines.add("See " + ChatColor.GREEN + "/xmas");
             event.addLines(plugin, Priority.HIGHEST, lines);
