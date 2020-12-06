@@ -171,8 +171,6 @@ public final class ChristmasPlugin extends JavaPlugin {
             player.sendMessage(ChatColor.RED + "Open present " + (playerProgress.getPresentsOpened() + 1) + " first.");
             return;
         }
-        playerProgress.setPresentsOpened(index);
-        playersJson.markDirty(playerProgress);
         givePresent(player, index);
     }
 
@@ -197,7 +195,10 @@ public final class ChristmasPlugin extends JavaPlugin {
         }
         gui.setEditable(true);
         gui.onClose(event -> {
-                System.out.println("onClose");
+                getLogger().info(player.getName() + " received present #" + index);
+                PlayerProgress playerProgress = getProgress(player);
+                playerProgress.setPresentsOpened(index);
+                playersJson.markDirty(playerProgress);
                 Advancements.give(player, this, "present" + index);
                 player.sendTitle(new Title("", ChatColor.GREEN + "Present #" + index + " Found!", 5, 20, 5));
                 for (ItemStack item: event.getInventory()) {
@@ -206,6 +207,7 @@ public final class ChristmasPlugin extends JavaPlugin {
                         player.getWorld().dropItem(player.getEyeLocation(), drop).setPickupDelay(0);
                     }
                 }
+                event.getInventory().clear();
             });
         gui.open(player);
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.25f, 2.0f);
