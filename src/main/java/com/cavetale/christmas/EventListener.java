@@ -31,11 +31,13 @@ public final class EventListener implements Listener {
     @EventHandler
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         if (!(event.getRightClicked() instanceof ArmorStand)) return;
+        Player player = event.getPlayer();
         ArmorStand armorStand = (ArmorStand) event.getRightClicked();
         for (PresentRuntime presentRuntime : plugin.getPresentRuntimes()) {
             if (!presentRuntime.isArmorStand(armorStand)) continue;
-            plugin.findPresent(event.getPlayer(), presentRuntime.getIndex());
             event.setCancelled(true);
+            if (!player.hasPermission("christmas.christmas")) return;
+            plugin.findPresent(player, presentRuntime.getIndex());
             return;
         }
     }
