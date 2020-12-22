@@ -57,8 +57,10 @@ public final class ChristmasPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        clearPresents();
         Gui.onDisable(this);
+        if (presentsJson.isDirty()) savePresents();
+        if (playersJson.isDirty()) savePlayers();
+        clearPresents();
     }
 
     public void enter(Player player) {
