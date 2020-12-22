@@ -18,6 +18,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -42,7 +43,7 @@ public final class EventListener implements Listener {
             if (!presentRuntime.isArmorStand(armorStand)) continue;
             event.setCancelled(true);
             if (!player.hasPermission("christmas.christmas")) return;
-            if (player.getOpenInventory() != null) return;
+            if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
             Long cooldown = cooldowns.get(player.getUniqueId());
             long now = System.currentTimeMillis();
             if (cooldown != null && cooldown > now) return;
