@@ -7,7 +7,10 @@ import com.cavetale.sidebar.PlayerSidebarEvent;
 import com.cavetale.sidebar.Priority;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,11 +20,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
     public static final String CHECKMARK = "\u2713";
     private final ChristmasPlugin plugin;
+    private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     public EventListener enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -37,6 +42,11 @@ public final class EventListener implements Listener {
             if (!presentRuntime.isArmorStand(armorStand)) continue;
             event.setCancelled(true);
             if (!player.hasPermission("christmas.christmas")) return;
+            if (player.getOpenInventory() != null) return;
+            Long cooldown = cooldowns.get(player.getUniqueId());
+            long now = System.currentTimeMillis();
+            if (cooldown != null && cooldown > now) return;
+            cooldowns.put(player.getUniqueId(), now + 1000L);
             plugin.findPresent(player, presentRuntime.getIndex());
             return;
         }
@@ -45,6 +55,11 @@ public final class EventListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         plugin.enter(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        cooldowns.remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
