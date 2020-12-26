@@ -69,7 +69,9 @@ public final class EventListener implements Listener {
         int today = Cal.today();
         if (today < 1 || today > 25) return;
         int progress = plugin.getProgress(player).getPresentsOpened();
-        if (progress >= today || progress >= 25) {
+        if (progress >= 25) {
+            return;
+        } else if (progress >= today) {
             int hoursLeft = Cal.hoursLeft();
             String hoursLeftString = hoursLeft == 1 ? "1 hour" : hoursLeft + " hours";
             event.addLines(plugin, Priority.HIGHEST,
