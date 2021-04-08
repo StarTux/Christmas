@@ -188,10 +188,10 @@ public final class ChristmasPlugin extends JavaPlugin {
         for (Item item : items) {
             itemStacks.add(item.toItemStack());
         }
-        ItemStack christmasTokenItem = Mytems.CHRISTMAS_TOKEN.getMytem().getItem();
+        ItemStack christmasTokenItem = Mytems.CHRISTMAS_TOKEN.createItemStack(player);
         christmasTokenItem.setAmount(((index - 1) % 3) + 1);
         itemStacks.add(christmasTokenItem);
-        itemStacks.add(Mytems.KITTY_COIN.getMytem().getItem());
+        itemStacks.add(Mytems.KITTY_COIN.createItemStack(player));
         for (int i = 0; i < itemStacks.size(); i += 1) {
             gui.setItem(indexes.get(i), itemStacks.get(i));
         }
