@@ -74,14 +74,6 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Sidebar -->
-    <dependency>
-      <groupId>com.cavetale.sidebar</groupId>
-      <artifactId>sidebar</artifactId>
-      <version>0.1-SNAPSHOT</version>
-      <optional>true</optional>
-    </dependency>
-
     <!-- Mytems -->
     <dependency>
       <groupId>com.cavetale.mytems</groupId>
