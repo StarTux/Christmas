@@ -2,18 +2,17 @@ package com.cavetale.christmas;
 
 import com.cavetale.christmas.json.Present;
 import com.cavetale.christmas.util.Cal;
-import com.cavetale.christmas.util.Text;
-import com.cavetale.sidebar.PlayerSidebarEvent;
-import com.cavetale.sidebar.Priority;
+import com.cavetale.core.event.hud.PlayerHudEvent;
+import com.cavetale.core.event.hud.PlayerHudPriority;
+import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,6 +21,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -64,7 +66,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerSidebar(PlayerSidebarEvent event) {
+    public void onPlayerHud(PlayerHudEvent event) {
         Player player = event.getPlayer();
         int today = Cal.today();
         if (today < 1 || today > 25) return;
@@ -74,17 +76,19 @@ public final class EventListener implements Listener {
         } else if (progress >= today) {
             int hoursLeft = Cal.hoursLeft();
             String hoursLeftString = hoursLeft == 1 ? "1 hour" : hoursLeft + " hours";
-            event.addLines(plugin, Priority.HIGHEST,
-                           Arrays.asList("Xmas " + ChatColor.GREEN + CHECKMARK,
-                                         "Next " + ChatColor.GREEN + hoursLeftString));
+            event.sidebar(PlayerHudPriority.HIGHEST,
+                          List.of(textOfChildren(text("Xmas ", WHITE), text(CHECKMARK, GREEN)),
+                                  textOfChildren(text("Next ", WHITE), text(hoursLeftString, GREEN))));
         } else {
             Present present = plugin.getPresentsJson().getPresent(progress);
             int gifts = today - progress;
-            List<String> lines = new ArrayList<>();
-            lines.add("Xmas " + ChatColor.GREEN + "Present #" + (progress + 1));
-            lines.addAll(Text.wrapLine("Hint " + ChatColor.GRAY + present.getHint(), 18));
-            lines.add("See " + ChatColor.GREEN + "/xmas");
-            event.addLines(plugin, Priority.HIGHEST, lines);
+            List<Component> lines = new ArrayList<>();
+            lines.add(textOfChildren(text("Xmas ", GREEN), text("Present #" + (progress + 1), WHITE)));
+            for (String line : Text.wrapLine("Hint: " + present.getHint(), 18)) {
+                lines.add(text(line, GRAY));
+            }
+            lines.add(textOfChildren(text("See " + GREEN), text("/xmas", WHITE)));
+            event.sidebar(PlayerHudPriority.HIGHEST, lines);
         }
     }
 }
